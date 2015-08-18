@@ -5,13 +5,24 @@
 
     $app = new Silex\Application();
 
-    $server = 'mysql:host=localhost:;dbname=to_do';
-    $username = 'root';
+    $server = 'mysql:host=localhost:3306;dbname=to_do';
+    $user = 'root';
     $password = 'root';
-    $DB = new PDO($server, $username, $password);
-    $app->register(new Silex\Provider\TwigServiceProvider(), array(
-        'twig.path' => __DIR__.'/../views'
-    ));
+    // $db = 'to_do';
+    // $host = '127.0.0.1';
+    $port = 3306;
+    $DB = new PDO($server, $user, $password);
+
+    // $link = mysql_connect(
+    //     "$host:$port", 
+    //     $user, 
+    //     $password
+    // );
+
+    // $db_selected = mysql_select_db(
+    //     $db, 
+    //     $link
+    // );
 
     $app->get("/", function() use ($app) {
         return $app['twig']->render('index.html.twig');
