@@ -5,63 +5,46 @@
 
     $app = new Silex\Application();
 
-    $server = 'mysql:host=localhost:8888;dbname=to_do';
-    $user = 'root';
+    $server = 'mysql:host=localhost:;dbname=to_do';
+    $username = 'root';
     $password = 'root';
-    $db = 'to_do';
-    $host = 'localhost';
-    $port = 3306;
-    $link = mysql_connect(
-        $host:$port,
-        $user,
-        $password
-        );   
-    $db_selected = mysql_select_db( $db, $link);
-    //$DB = new PDO($server, $username, $password);
-
-    //     $server = 'mysql:host=localhost:8889;dbname=to_do';
-    // $user = 'root';
-    // $password = 'root';
-    // $port = 3306
-    //$DB = new PDO($server, $username, $password);
-
-
+    $DB = new PDO($server, $username, $password);
     $app->register(new Silex\Provider\TwigServiceProvider(), array(
         'twig.path' => __DIR__.'/../views'
     ));
 
     $app->get("/", function() use ($app) {
-        return $app['twig']->render('index.twig');
+        return $app['twig']->render('index.html.twig');
     });
 
     $app->get("/tasks", function() use ($app) {
-        return $app['twig']->render('tasks.twig', array('tasks' => Task::getAll()));
+        return $app ['twig']->render('tasks.html.twig', array('tasks' => Task::getAll()));
     });
 
     $app->get("/categories", function() use ($app) {
-        return $app['twig']->render('categories.twig', array('categories' => Category::getAll()));
+        return $app ['twig']->render('categories.html.twig', array('categories' => Category::getAll()));
     });
 
     $app->post("/tasks", function() use ($app) {
         $task = new Task($_POST['description']);
         $task->save();
-        return $app['twig']->render('tasks.twig', array('tasks' => Task::getAll()));
+        return $app ['twig']->render('tasks.html.twig', array('tasks' => Task::getAll()));
     });
 
     $app->post("/delete_tasks", function() use ($app) {
         Task::deleteAll();
-        return $app['twig']->render('index.twig');
+        return $app['twig']->render('index.html.twig');
     });
 
-    $app->post("/categories", function() use($app) {
+    $app->post("/categories", function() use ($app) {
         $category = new Category($_POST['name']);
         $category->save();
-        return $app['twig']->render('categories.twig', array('categories'=>Category::getAll()));
+        return $app['twig']->render('categories.html.twig', array('categories' => Category::getAll()));
     });
 
     $app->post("/delete_categories", function() use ($app) {
         Category::deleteAll();
-        return $app['twig']->render('index.twig');
+        return $app['twig']->render('index.html.twig');
     });
 
     return $app;
